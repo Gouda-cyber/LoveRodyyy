@@ -171,8 +171,6 @@
       }
     }
 
-    /* القلوب */
-
     .heart {
       position: absolute;
 
@@ -254,8 +252,6 @@
         opacity: 0;
       }
     }
-
-    /* شاشة الحب */
 
     .love-mode {
       background:
@@ -384,7 +380,6 @@
 
     noCount++;
 
-
     const index =
       Math.min(
         noCount - 1,
@@ -398,11 +393,6 @@
 
     changeMessage("");
 
-
-    /*
-      كل مرة تضغط لا
-      ايوه يكبر
-    */
 
     yesScale += 0.18;
 
@@ -420,10 +410,6 @@
     noButton.style.transform =
       `scale(${noScale})`;
 
-
-    /*
-      زر لا يتحرك شوية
-    */
 
     const randomX =
       Math.random() * 34 - 17;
@@ -448,19 +434,11 @@
 
   function yesClicked() {
 
-    /*
-      لو قالت ايوه من البداية
-    */
-
     if (noCount === 0) {
 
       showAreYouSure();
 
     }
-
-    /*
-      لو كانت بتدوس لا وبعدين ايوه
-    */
 
     else {
 
@@ -506,46 +484,22 @@
 
   function showLove() {
 
-    /*
-      تغيير الخلفية
-    */
-
     scene.classList.add("love-mode");
 
 
-    /*
-      إخفاء العنوان
-    */
-
     title.textContent = "";
 
-
-    /*
-      الجملة الأساسية
-    */
 
     changeMessage(
       "وانا كمان بحبك اوي"
     );
 
 
-    /*
-      مسح الأزرار القديمة
-    */
-
     buttons.innerHTML = "";
 
 
-    /*
-      تشغيل القلوب
-    */
-
     createHearts(60);
 
-
-    /*
-      زرار يكمل للرسالة
-    */
 
     const continueButton =
       document.createElement("button");
@@ -564,43 +518,6 @@
 
 
     continueButton.onclick =
-      showMessage;
-
-
-    buttons.appendChild(
-      continueButton
-    );
-
-  }
-
-
-  function showMessage() {
-
-    title.textContent =
-      "حاجه ليكي";
-
-
-    changeMessage(
-      "وجودك بيفرق معايا اكتر مما تتخيلي"
-    );
-
-
-    buttons.innerHTML = "";
-
-
-    const endButton =
-      document.createElement("button");
-
-
-    endButton.className =
-      "yes";
-
-
-    endButton.textContent =
-      "خلصنا";
-
-
-    endButton.onclick =
       function() {
 
         title.textContent = "";
@@ -615,7 +532,7 @@
 
 
     buttons.appendChild(
-      endButton
+      continueButton
     );
 
   }
