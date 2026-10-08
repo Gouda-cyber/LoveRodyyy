@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>حاجه ليكي</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      color: white;
+      background:
+        radial-gradient(circle at center, #281722 0%, #130b12 55%, #080508 100%);
+    }
+
+    .scene {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      transition: background 1s ease;
+    }
+
+    .card {
+      position: relative;
+      z-index: 10;
+
+      width: min(90%, 560px);
+      min-height: 310px;
+
+      padding: 50px 30px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+
+      background: rgba(255,255,255,0.05);
+
+      backdrop-filter: blur(15px);
+
+      box-shadow:
+        0 20px 80px rgba(0,0,0,0.4);
+
+      transition: 0.8s ease;
+    }
+
+    h1 {
+      margin: 0 0 30px;
+
+      font-size: clamp(30px, 7vw, 48px);
+
+      font-weight: 500;
+
+      transition: 0.5s ease;
+    }
+
+    .message {
+      min-height: 65px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: clamp(22px, 5vw, 34px);
+
+      line-height: 1.8;
+
+      transition: 0.5s ease;
+    }
+
+    .buttons {
+      min-height: 75px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 14px;
+
+      direction: ltr;
+
+      transition: 0.5s ease;
+    }
+
+    button {
+      min-width: 105px;
+
+      padding: 14px 28px;
+
+      border-radius: 15px;
+
+      border: none;
+
+      font-family: inherit;
+      font-size: 17px;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.35s ease,
+        opacity 0.35s ease,
+        box-shadow 0.35s ease;
+    }
+
+    .yes {
+      background: white;
+      color: #181018;
+
+      box-shadow:
+        0 8px 30px rgba(255,255,255,0.12);
+    }
+
+    .no {
+      color: white;
+
+      background: rgba(255,255,255,0.08);
+
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+    }
+
+    .small {
+      margin-top: 18px;
+
+      font-size: 13px;
+
+      opacity: 0.5;
+    }
+
+    .fade {
+      animation: fade 0.55s ease;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* القلوب */
+
+    .heart {
+      position: absolute;
+
+      bottom: -60px;
+      left: var(--x);
+
+      width: var(--size);
+      height: var(--size);
+
+      opacity: 0;
+
+      transform: rotate(45deg);
+
+      background: rgba(
+        255,
+        110,
+        155,
+        var(--opacity)
+      );
+
+      filter: blur(var(--blur));
+
+      animation:
+        floatHeart var(--duration)
+        linear
+        var(--delay)
+        infinite;
+
+      pointer-events: none;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+
+      position: absolute;
+
+      width: 100%;
+      height: 100%;
+
+      border-radius: 50%;
+
+      background: inherit;
+    }
+
+    .heart::before {
+      left: -50%;
+    }
+
+    .heart::after {
+      top: -50%;
+    }
+
+    @keyframes floatHeart {
+
+      0% {
+        transform:
+          translateY(0)
+          rotate(45deg)
+          scale(0.7);
+
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      75% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform:
+          translateY(-115vh)
+          rotate(405deg)
+          scale(1.15);
+
+        opacity: 0;
+      }
+    }
+
+    /* شاشة الحب */
+
+    .love-mode {
+      background:
+        radial-gradient(
+          circle at center,
+          #3a1725 0%,
+          #170a12 55%,
+          #080508 100%
+        );
+    }
+
+    .love-mode .card {
+      border-color: rgba(255,150,190,0.2);
+
+      box-shadow:
+        0 20px 100px rgba(255,70,130,0.12);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="scene" id="scene">
+
+    <div class="card">
+
+      <h1 id="title">
+        بتحبيني ؟
+      </h1>
+
+      <div
+        class="message"
+        id="message">
+      </div>
+
+      <div
+        class="buttons"
+        id="buttons">
+
+        <button
+          class="yes"
+          id="yesButton">
+          ايوه
+        </button>
+
+        <button
+          class="no"
+          id="noButton">
+          لا
+        </button>
+
+      </div>
+
+      <div
+        class="small"
+        id="smallText">
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+  const scene =
+    document.getElementById("scene");
+
+  const title =
+    document.getElementById("title");
+
+  const message =
+    document.getElementById("message");
+
+  const buttons =
+    document.getElementById("buttons");
+
+  const yesButton =
+    document.getElementById("yesButton");
+
+  const noButton =
+    document.getElementById("noButton");
+
+  const smallText =
+    document.getElementById("smallText");
+
+
+  let noCount = 0;
+
+  let yesScale = 1;
+
+  let noScale = 1;
+
+
+  const noMessages = [
+
+    "متأكده ؟",
+
+    "متأكده بجد ؟",
+
+    "فكري تاني",
+
+    "مش مصدقك",
+
+    "انتي متأكده من قرارك ده ؟",
+
+    "طب جربي ايوه المره دي"
+
+  ];
+
+
+  function changeMessage(text) {
+
+    message.classList.remove("fade");
+
+    void message.offsetWidth;
+
+    message.textContent = text;
+
+    message.classList.add("fade");
+
+  }
+
+
+  function noClicked() {
+
+    noCount++;
+
+
+    const index =
+      Math.min(
+        noCount - 1,
+        noMessages.length - 1
+      );
+
+
+    title.textContent =
+      noMessages[index];
+
+
+    changeMessage("");
+
+
+    /*
+      كل مرة تضغط لا
+      ايوه يكبر
+    */
+
+    yesScale += 0.18;
+
+    noScale =
+      Math.max(
+        0.58,
+        noScale - 0.08
+      );
+
+
+    yesButton.style.transform =
+      `scale(${yesScale})`;
+
+
+    noButton.style.transform =
+      `scale(${noScale})`;
+
+
+    /*
+      زر لا يتحرك شوية
+    */
+
+    const randomX =
+      Math.random() * 34 - 17;
+
+    const randomY =
+      Math.random() * 24 - 12;
+
+
+    noButton.style.translate =
+      `${randomX}px ${randomY}px`;
+
+
+    if (noCount >= 6) {
+
+      smallText.textContent =
+        "الزر التاني شكله بيحاول يقنعك";
+
+    }
+
+  }
+
+
+  function yesClicked() {
+
+    /*
+      لو قالت ايوه من البداية
+    */
+
+    if (noCount === 0) {
+
+      showAreYouSure();
+
+    }
+
+    /*
+      لو كانت بتدوس لا وبعدين ايوه
+    */
+
+    else {
+
+      showLove();
+
+    }
+
+  }
+
+
+  function showAreYouSure() {
+
+    title.textContent =
+      "بجد ؟";
+
+
+    changeMessage("");
+
+
+    buttons.innerHTML = "";
+
+
+    const button =
+      document.createElement("button");
+
+
+    button.className =
+      "yes";
+
+
+    button.textContent =
+      "ايوه بجد";
+
+
+    button.onclick =
+      showLove;
+
+
+    buttons.appendChild(button);
+
+  }
+
+
+  function showLove() {
+
+    /*
+      تغيير الخلفية
+    */
+
+    scene.classList.add("love-mode");
+
+
+    /*
+      إخفاء العنوان
+    */
+
+    title.textContent = "";
+
+
+    /*
+      الجملة الأساسية
+    */
+
+    changeMessage(
+      "وانا كمان بحبك اوي"
+    );
+
+
+    /*
+      مسح الأزرار القديمة
+    */
+
+    buttons.innerHTML = "";
+
+
+    /*
+      تشغيل القلوب
+    */
+
+    createHearts(60);
+
+
+    /*
+      زرار يكمل للرسالة
+    */
+
+    const continueButton =
+      document.createElement("button");
+
+
+    continueButton.className =
+      "yes";
+
+
+    continueButton.textContent =
+      "كملي";
+
+
+    continueButton.style.marginTop =
+      "22px";
+
+
+    continueButton.onclick =
+      showMessage;
+
+
+    buttons.appendChild(
+      continueButton
+    );
+
+  }
+
+
+  function showMessage() {
+
+    title.textContent =
+      "حاجه ليكي";
+
+
+    changeMessage(
+      "وجودك بيفرق معايا اكتر مما تتخيلي"
+    );
+
+
+    buttons.innerHTML = "";
+
+
+    const endButton =
+      document.createElement("button");
+
+
+    endButton.className =
+      "yes";
+
+
+    endButton.textContent =
+      "خلصنا";
+
+
+    endButton.onclick =
+      function() {
+
+        title.textContent = "";
+
+        changeMessage(
+          "بس لسه عندي كلام كتير نفسي اقولهولك"
+        );
+
+        buttons.innerHTML = "";
+
+      };
+
+
+    buttons.appendChild(
+      endButton
+    );
+
+  }
+
+
+  function createHearts(amount) {
+
+    for (
+      let i = 0;
+      i < amount;
+      i++
+    ) {
+
+      const heart =
+        document.createElement("div");
+
+
+      heart.className =
+        "heart";
+
+
+      heart.style.setProperty(
+        "--x",
+        Math.random() * 100 + "vw"
+      );
+
+
+      heart.style.setProperty(
+        "--size",
+        8 + Math.random() * 22 + "px"
+      );
+
+
+      heart.style.setProperty(
+        "--opacity",
+        (
+          0.18 +
+          Math.random() * 0.45
+        ).toFixed(2)
+      );
+
+
+      heart.style.setProperty(
+        "--duration",
+        5 + Math.random() * 8 + "s"
+      );
+
+
+      heart.style.setProperty(
+        "--delay",
+        -Math.random() * 10 + "s"
+      );
+
+
+      heart.style.setProperty(
+        "--blur",
+        Math.random() * 2.5 + "px"
+      );
+
+
+      scene.appendChild(
+        heart
+      );
+
+    }
+
+  }
+
+
+  yesButton.onclick =
+    yesClicked;
+
+
+  noButton.onclick =
+    noClicked;
+
+</script>
+
+</body>
+</html>
